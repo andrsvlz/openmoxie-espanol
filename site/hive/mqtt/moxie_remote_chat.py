@@ -17,6 +17,7 @@ from ..automarkup import initialize_rules as automarkup_initialize_rules
 from .global_responses import GlobalResponses
 from .conversations import ChatSession, SinglePromptDBChatSession
 from .volley import Volley
+from .mqtt_tts_mirror import TTSMirrorPublisher
 
 # Turn on to enable global commands in the cloud
 _ENABLE_GLOBAL_COMMANDS = True
@@ -52,6 +53,8 @@ class RemoteChat:
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=_MAX_WORKER_THREADS)
         self._automarkup_rules = automarkup_initialize_rules()
         self._global_responses = GlobalResponses()
+        # Inicializar el publicador de espejo TTS
+        self._tts_mirror = TTSMirrorPublisher()
 
     def register_module(self, module_id, content_id, cname):
         self._modules[f"{module_id}/{content_id}"] = cname
@@ -167,6 +170,12 @@ class RemoteChat:
         if _LOG_ALL_RCR:
             logger.info(f"RemoteChatResponse\n{volley.response}")
 
+        # Publicar texto en MQTT antes de enviarlo al robot
+        output = volley.response.get("output", {})
+        text = output.get("text", "")
+        if text:
+            self._tts_mirror.publish_text(text)
+
         self._server.send_command_to_bot_json(device_id, "remote_chat", volley.response)
 
     # Produce / execute a global response
@@ -176,6 +185,12 @@ class RemoteChat:
         if output.get("text") and not output.get("markup"):
             # Run automarkup on any text-only responses
             output["markup"] = self.make_markup(output["text"])
+
+        # Publicar texto en MQTT antes de enviarlo al robot
+        text = output.get("text", "")
+        if text:
+            self._tts_mirror.publish_text(text)
+
         self._server.send_command_to_bot_json(device_id, "remote_chat", resp)
 
     def log_notify(self, rcr):
@@ -269,6 +284,8 @@ class RemoteChat:
                     # Rather than ignoring these, we return a generic FALLBACK response
                     fbline = "I'm sorry. Can  you repeat that?"
                     volley.set_output(fbline, fbline, output_type="FALLBACK")
+                    # Publicar texto en MQTT antes de enviarlo al robot
+                    self._tts_mirror.publish_text(fbline)
                     self._server.send_command_to_bot_json(device_id, "remote_chat", volley.response)
 
     def handled_global(self, device_id, volley):

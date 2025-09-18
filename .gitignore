@@ -1,9 +1,135 @@
-/.venv
-/00gitignore.txt
-/local/work/mosquitto.log
-/site/work/db.sqlite3
-/site/work/debug.log
-__pycache__/
+# OpenMoxie Español - Git Ignore
+
+# ===== DATOS SENSIBLES =====
+# Claves API y configuraciones privadas
+*.key
+*.pem
+*.p12
+*.pfx
+site/work/db.sqlite3
+site/work/debug.log
+config_espanol.py
+configurar_espanol.py
+
+# ===== DOCKER =====
+# Volúmenes y datos persistentes
+site/work/
+site/static/
+docker-compose.override.yml
 /docker-compose copy.yml
 /docker-compose copy 2.yml
-/site/work/debug.log
+
+# ===== PYTHON =====
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Environments
+.env
+.venv
+/.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/local/work/mosquitto.log
+
+# ===== MODELOS AI =====
+# Modelos de Whisper y Piper
+site/services/stt/models/
+*.onnx
+*.onnx.json
+*.bin
+*.safetensors
+
+# ===== AUDIO Y MEDIA =====
+# Archivos de audio temporales
+*.wav
+*.mp3
+*.ogg
+*.flac
+/tmp/
+temp/
+
+# ===== LOGS Y TEMPORALES =====
+# Logs del sistema
+*.log
+logs/
+mosquitto.log
+/00gitignore.txt
+
+# Archivos temporales
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# ===== IDE Y EDITORES =====
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+
+# ===== SISTEMA OPERATIVO =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ===== ESPECÍFICO DEL PROYECTO =====
+# Archivos de prueba y desarrollo
+test_*.py
+*_test.py
+debug_*
+experimental/
+
+# Configuraciones locales
+local_config.py
+override_settings.py
+
+# Backups
+*.bak
+*.backup
+backup/
+backups/

@@ -52,7 +52,7 @@ services:
       - ./site/services/stt/models:/models
     environment:
       MODELS_DIR: "/models"
-      MODEL_NAMES: "faster-whisper-small.en,faster-whisper-base.en"
+      MODEL_NAMES: "faster-whisper-base,faster-whisper-small"
     entrypoint:
       - /bin/sh
       - -lc
@@ -68,6 +68,8 @@ services:
           case "$$1" in
             faster-whisper-small.en) echo "https://huggingface.co/Systran/faster-whisper-small.en/resolve/main" ;;
             faster-whisper-base.en)  echo "https://huggingface.co/Systran/faster-whisper-base.en/resolve/main" ;;
+            faster-whisper-base)     echo "https://huggingface.co/Systran/faster-whisper-base/resolve/main" ;;
+            faster-whisper-small)    echo "https://huggingface.co/Systran/faster-whisper-small/resolve/main" ;;
             *) echo "" ;;
           esac
         }
@@ -112,7 +114,7 @@ services:
     #ports:
     #  - "8001:8001"
     environment:
-      STT_MODEL: /models/faster-whisper-small.en
+      STT_MODEL: /models/faster-whisper-base
       STT_DEVICE: "auto"
       STT_COMPUTE: "int8"
       STT_VAD: "1"
@@ -131,6 +133,7 @@ services:
       dockerfile: mqtt.Dockerfile
     ports:
       - "8883:8883"
+      - "1883:1883"
     volumes:
       - ./keys:/keys:ro
       - ./local/work:/work
@@ -151,7 +154,7 @@ services:
     #  - ./docker/seed-ollama.sh:/seed-ollama.sh:ro
     environment:
       OLLAMA_HOST: "http://ollama:11434"
-      OLLAMA_MODELS: "llama3.2:3b,deepseek-r1:1.5b"
+      OLLAMA_MODELS: "llama3.1:8b,qwen2.5:7b"
     entrypoint:
       - /bin/sh
       - -lc
@@ -185,9 +188,9 @@ services:
       STT_URL: http://stt:8001/stt
       OLLAMA_HOST: http://ollama:11434
       LLM_PROVIDER: ollama
-      OLLAMA_MODEL: llama3.2:3b
+      OLLAMA_MODEL: llama3.1:8b
       STT_BACKEND: local
-      STT_LANG: en
+      STT_LANG: es
       MQTT_HOST: mqtt
       MQTT_PORT: "8883"
       WEB_WORKERS: "1"

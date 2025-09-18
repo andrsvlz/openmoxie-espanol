@@ -1,397 +1,277 @@
-# OpenMoxie with Local Ollama, XAi Grok, and Local STT Support
+# 🤖 OpenMoxie Español
+
+**Robot compañero inteligente con soporte completo para español y TTS local**
 
 <p align="center">
   <img src="./site/static/hive/openmoxie_logo.svg" width="200" height="200" alt="OpenMoxie Logo">
 </p>
 
-Welcome!  
+OpenMoxie Español es una versión personalizada del proyecto [openmoxie-ollama](https://github.com/moxie-robot/openmoxie-ollama) que incluye:
 
-If you're looking for a solution to run your **Embodied Moxie Robot** ...Maybe give it a different personality or run some unfiltered LLM models, Your in the right place!
-
----
-
-## 📦 Based on the amazing work by [jbeghtol/openmoxie](https://github.com/jbeghtol/openmoxie)
-
-<a href="https://github.com/sponsors/vapors"> # Sponsor my work! and future development </a>
----
----
-
-## ⚠ Disclaimer
-
-> **USE AT YOUR OWN RISK**  
-> I take no responsibility for the output of these prompts or models. Or any resulting mental / physical health issues that arise from using them. 
-
->⚠️ **Not for children** ⚠️— may contain offensive language.
+- ✅ **Configuración automática en español**
+- ✅ **TTS local con Piper y voz española**
+- ✅ **Mirroring MQTT para reproducción de audio**
+- ✅ **Interfaz web completamente funcional**
+- ✅ **Soporte para Faster-Whisper multilingüe**
+- ✅ **Integración con Ollama para LLM**
 
 ---
 
-# 🚀 Quick Overview 
-
-## Components
-
-This project includes:
-
-- **Django app** for basic web services and database (SQLite3).
-- **MQTT-based remote chat** service with single prompt inferences from OpenAI.
-- **Ollama for Local chat** ollama running llama3.2:3b - with the ability to update models.
-- **Faster-Whisper Local (STT)** docker or venv for fully offline transcription (listening).
-- **Support for XAi Grok chat** XAI api support as an alternative to OpenAi.
-
-
-## 🛠 What You Need
-
-0. A Moxie robot with the firmware update — or flash it yourself.
-1. A computer (Ubuntu Linux / mac / Windows) on the same wireless network.
+## 📦 Basado en el increíble trabajo de [jbeghtol/openmoxie](https://github.com/jbeghtol/openmoxie)
 
 ---
 
-## 🔧 Easy Setup 
+## ⚠️ Aviso Importante
+
+Este proyecto está diseñado para uso educativo y de desarrollo. El usuario es responsable del contenido generado por los modelos de IA.
 
 ---
 
-## 🪟 Windows / Mac / Ubuntu - Quick Start
+## 🎯 Características Principales
 
-  Requires Windows with virtualization enabled.
+### 🗣️ **Text-to-Speech Local**
+- **Piper TTS** con voz española `es_ES-davefx-medium`
+- **Reproducción automática** de todo el texto que Moxie va a decir
+- **Monitor web** en tiempo real de mensajes TTS
+- **Sin dependencias de servicios externos**
 
-1. Install Docker Desktop (enable WSL2 engine) Download from Docker
-   
-    https://docs.docker.com/get-started/get-docker/
-    
+### 🎤 **Speech-to-Text Multilingüe**
+- **Faster-Whisper** con modelo `faster-whisper-base`
+- **Soporte nativo para español**
+- **Procesamiento local** sin envío a la nube
+- **Configuración automática** de idioma y modelo
 
-3. In PowerShell or bash:  Clone or download and build the repository (Downloads llama3.2:3b - 2gb)
+### 🧠 **Inteligencia Artificial**
+- **Ollama** con modelos `llama3.1:8b` y `qwen2.5:7b`
+- **Respuestas en español** configuradas por defecto
+- **Procesamiento local** completo
+- **Sin límites de uso**
 
-
-    clone:
-
-    ```powershell
-  
-      git clone https://github.com/vapors/openmoxie-ollama
-      cd openmoxie-ollama
-  
-    ```
-  
-    build:
-
-    ```powershell
-  
-      docker compose up -d model-init data-init stt mqtt ollama ollama-init web
-  
-    ```
-
-4. Open the app
-   
-   Go to http://localhost:8000
-
-
+### 📡 **Comunicación MQTT**
+- **Broker MQTT integrado** para comunicación interna
+- **TTS Mirroring** automático a topic `moxie/tts/text`
+- **Monitoreo en tiempo real** de mensajes
+- **Arquitectura escalable** para múltiples servicios
 
 ---
 
-## 💬 Using XAi Grok & OpenAi
+## 🚀 Instalación Rápida
 
-1. Get an **XAi API key** and deposit funds: [https://x.ai/api](https://x.ai/api)
-2. Get an **OpenAI API key**: [https://openai.com/index/openai-api/](https://openai.com/index/openai-api/)
-
-
-
-----
-
-## 🖥 More Complex Setup UBUNTU (.venv)
-
-1. Clone this repo to your home directory
+### Requisitos Previos
 
 ```bash
-cd ~
-git clone https://github.com/vapors/openmoxie-ollama.git
+# Ubuntu/Debian
+sudo apt update
+sudo apt install -y docker docker-compose git python3 python3-pip curl
 
-```
-2. download models for local stt (speech recognition)
-
-```bash
-
-cd openmoxie-ollama
-chmod +x scripts/get_models_linux.sh
-./scripts/get_models_linux.sh faster-whisper-small.en faster-whisper-base.en
-
-```
-Model files should download to **~/openmoxie-ollama/site/services/stt/models** 
-
-* Follow Remaining Instructions In Order
-
-### 1️⃣ Install Docker Desktop or CLI
-Download Docker
-https://docs.docker.com/desktop/setup/install/linux/ubuntu/
-
-```bash
-#cd to downloads folder
-sudo apt-get install ./docker-desktop-amd64.deb
+# Verificar instalación
+docker --version
+docker-compose --version
 ```
 
-If that doesn’t work, Just install the CLI manually:
-```bash
-sudo apt-get install ca-certificates curl
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-  -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-```
-Add the repository for docker:
-```bash
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-  https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" \
-  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+### Instalación Automática
 
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```bash
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/openmoxie-espanol.git
+cd openmoxie-espanol
+
+# Ejecutar instalación automática
+./scripts/install.sh
+```
+
+El script de instalación:
+1. ✅ Verifica requisitos del sistema
+2. ✅ Instala herramientas MQTT
+3. ✅ Descarga e instala Piper TTS
+4. ✅ Configura servicio TTS local
+5. ✅ Construye e inicia servicios Docker
+6. ✅ Aplica configuración española
+7. ✅ Crea usuario administrador
+8. ✅ Verifica funcionamiento completo
+
+---
+
+## 🎮 Uso
+
+### Acceso a la Interfaz Web
+
+```
+URL: http://localhost:8000
+Usuario: admin
+Contraseña: admin123
+```
+
+### Puppet Mode (Modo Títere)
+
+1. **Accede** a http://localhost:8000
+2. **Inicia sesión** con las credenciales admin/admin123
+3. **Navega** a la sección Puppet Mode
+4. **Escribe** cualquier texto en español
+5. **Envía** el mensaje
+6. **Escucha** el audio reproduciéndose automáticamente en tu computador
+
+### Monitor TTS
+
+```
+URL: http://localhost:8787
+```
+
+Interfaz web que muestra:
+- 📨 **Mensajes recibidos** en tiempo real
+- 🔊 **Estado de reproducción** de audio
+- 📊 **Estadísticas** de uso
+- 🔧 **Información del sistema**
+
+---
+
+## 🏗️ Arquitectura
+
+### Componentes
+
+| Componente | Puerto | Descripción |
+|------------|--------|-------------|
+| **Web Interface** | 8000 | Interfaz principal de Moxie |
+| **MQTT Broker** | 1883 | Comunicación entre servicios |
+| **Ollama** | 11434 | Servidor de modelos LLM |
+| **STT Service** | 8001 | Faster-Whisper para transcripción |
+| **TTS Monitor** | 8787 | Monitor web del servicio TTS |
+
+### Flujo de Datos
+
+```
+[Interfaz Web] → [Moxie Server] → [MQTT Broker] → [TTS Service] → [Audio Output]
+                      ↓
+                 [Ollama LLM] ← [Faster-Whisper STT]
 ```
 
 ---
 
-### 2️⃣ Install Ollama and run a model
+## 🔧 Configuración
+
+### Variables de Entorno
+
 ```bash
-curl -fsSL https://ollama.com/install.sh | sh
+# Docker Compose
+MQTT_HOST=mqtt
+OLLAMA_HOST=ollama
+STT_HOST=stt
+
+# TTS Local
+PIPER_MODEL=es_ES-davefx-medium
+AUDIO_DEVICE=default
 ```
-Download and test a model (2GB CPU-friendly model example used in sample content):
-more models(gemma, deepseek, gpt-oss, etc...) can be found at https://ollama.com/search keep the size reasonable for your computers power
+
+### Configuración Avanzada
+
+#### Cambiar Voz TTS
+
 ```bash
-ollama run llama3.2:3b
-#test the model response and then you can exit by typing "/bye"
+# Descargar otra voz española
+cd services/moxie-tts-subscriber/piper
+curl -L "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx" -o nueva-voz.onnx
+curl -L "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/es/es_ES/sharvard/medium/es_ES-sharvard-medium.onnx.json" -o nueva-voz.onnx.json
 
-# you can stop the model it will relaunch if activated
-ollama stop llama3.2:3b # stop model by name
-ollama list # show all available models
+# Actualizar configuración en services/moxie-tts-subscriber/app.py
+PIPER_MODEL = "nueva-voz.onnx"
 ```
 
----
+#### Cambiar Modelo STT
 
-### 3️⃣ Set Up Server Environment
 ```bash
-sudo apt install python3-venv
-cd ~/openmoxie-ollama
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+# Editar site/hive/models.py
+stt_model = "/models/faster-whisper-large-v2"  # Modelo más preciso
 ```
-Install dependencies:
+
+---
+
+## 🐛 Troubleshooting
+
+### Problemas Comunes
+
+#### No se escucha audio
+
 ```bash
-pip install -r requirements.txt
+# Verificar servicio TTS
+systemctl --user status moxie-tts.service
+
+# Ver logs
+journalctl --user -u moxie-tts.service -f
+
+# Reiniciar servicio
+systemctl --user restart moxie-tts.service
 ```
-Run migrations:
+
+#### Error de conexión MQTT
+
 ```bash
-python3 site/manage.py makemigrations
-python3 site/manage.py migrate
+# Verificar broker MQTT
+docker compose logs mqtt
+
+# Probar conexión
+mosquitto_pub -h localhost -p 1883 -t "test" -m "hello"
 ```
-Create superuser:
+
+#### Servicios Docker no inician
+
 ```bash
-python site/manage.py createsuperuser
+# Ver logs de todos los servicios
+docker compose logs
+
+# Reconstruir imágenes
+docker compose build --no-cache
+docker compose up -d
 ```
-Import initial data:
+
+### Logs Útiles
+
 ```bash
-python3 site/manage.py init_data
-```
+# Logs del servicio web
+docker compose logs web -f
 
-### 4️⃣ Start MQTT Broker and STT service for Speech Transcription
-```bash
-sudo docker compose up -d mqtt stt
-```
-*(Re-launches on reboot — check with `sudo docker ps`)*
+# Logs del servicio TTS
+journalctl --user -u moxie-tts.service -f
 
-- The STT docker reads model files from **./site/services/stt/models → /models** downloaded previously
-- You can check health and model of stt:
-  ```bash
-  curl -s http://127.0.0.1:8001/health
-  # should output {"ok": true, "model": "...", "device": "cpu|cuda", "compute": "int8|float16"}
-  ```
-  models can be selected in admin
----
+# Logs de MQTT
+docker compose logs mqtt -f
 
-### 5️⃣ Start the OpenMoxie Server and do the usual Wifi and or Migration QR code
-```bash
-python3 site/manage.py runserver --noreload
-```
-### Main admin
-Open [http://localhost:8000/](http://localhost:8000/)  
-
-### API Setup
-Setup page: [http://localhost:8000/hive/setup](http://localhost:8000/hive/setup)  
-
-Enter **XAi** and **OpenAI** API keys.
-
-
-# Choose options for Local or OpenAi whisper STT
-
-> ⚠️ OpenAI Whisper for STT — still requires API key
-
----
-
-## ⚙ Loading Sample Schedules & Chats
-
-1. Click **"Choose file"**
-2. Select:
-   ```
-   ~/openmoxie-ollama/samples/ollama_local_sample.json
-   ```
-3. Click **"Upload for review"**
-4. Select schedules and conversations → **Import**
-
----
-
-## 🔄 Switch to a different AI Provider or Model by changing schedules
-
-1. Click your Moxie device name under **Devices**.
-2. Select a schedule from the dropdown (e.g., `only_chat_xai_grok`).
-
----
-
----
-
-## 📝 Changing Moxies Attitude - Editing Single Prompt Chats
-
-In Admin → Single prompt chats → Edit:
-http://localhost:8000/admin/hive/singlepromptchat/
-
-- **Module ID:** `OPENMOXIE_CHAT`
-- **Content ID:** unique to your chat.
-- **Opener:** What Moxie says to start the chat.
-- **Prompt:** System prompt for attitude/behavior.
-- **Vendor:** AI provider.
-- **Model:** Full model name.
-
-Load additional Local model example:
-```bash
-ollama run <model-name>
-ollama stop <model-name>
-ollama list
-```
-In addition to changing the local models you can experiment with other remote API models for example: `"grok-4"`
-
-- **Max tokens:** Fewer Tokens = shorter response. For local ollama 0 = unlimited (may take forever to respond.)
-- **Temperature:** Adjust randomness level.
-
-After changes:
-```bash
-python3 site/manage.py runserver --noreload
-```
-Changing face color may also trigger updates.
-
----
-
-
-## 📅 Edit Moxie Schedule
-
-In Admin → Moxie schedules → Edit:
-http://localhost:8000/admin/hive/moxieschedule/
-
-Schedules:
-- `only_chat_xai_grok`
-- `only_chat_ollama_local`
-
-Example schedule JSON:
-```json
-{
-  "provided_schedule": [
-    { "module_id": "OPENMOXIE_CHAT", "content_id": "grok" }
-  ],
-  "chat_request": { "module_id": "OPENMOXIE_CHAT", "content_id": "grok" }
-}
-```
-
-
-
-## ⚠ Disclaimer
-
-> **USE AT YOUR OWN RISK**  
-> I take no responsibility for the output of these prompts or models.  
-> **Not for children** — may contain offensive language.
-
----
-
-## 🎉 Enjoy OpenMoxie!
-
----
-
----
-# Additional Technical details and troubleshooting
-
-
-### 🔇 Offline Speech-to-Text (Local STT)
-
-You can run speech-to-text **fully offline** using a small local service based on **Faster-Whisper**.
-
-**Preferred (Docker)**
-- Use `docker compose up -d stt` as shown above. The service exposes:
-  - `/health` → model/device/compute
-  - `/stt` → transcription endpoint
-  - `/control/models` → discover available model folders under `/models`
-  - `/control/reload` → hot-switch model/device/compute without restart
-
-**Alternative (venv)**
-If you don’t want Docker, you can run the service directly:
-```bash
-sudo apt-get update && sudo apt-get install -y ffmpeg
-
-# from repo root
-export STT_MODEL="$(pwd)/site/services/stt/models/faster-whisper-small.en"
-export STT_DEVICE=auto            # auto|cpu|cuda
-export STT_COMPUTE=int8           # CPU: int8, GPU: float16
-uvicorn --app-dir site services.stt.stt_service:app --host 0.0.0.0 --port 8001
+# Logs de Ollama
+docker compose logs ollama -f
 ```
 
 ---
 
-## 🔧 Configure STT in Setup
+## 🤝 Contribuir
 
-Open **Setup → Speech-to-Text**:
-- **Backend**: Local (faster-whisper) or OpenAI Whisper
-- **Local STT URL**: `http://127.0.0.1:8001/stt` (Docker and venv default)
-- **Default language**: `en`
-- **Device / Compute / Model**: choose from dropdowns when Local is selected  
-  (Model list comes from the running STT service; adding a new model folder under `site/services/stt/models/` shows up after refresh.)
-
-When you click **Save**, the server requests a **hot reload** on the STT service so changes apply instantly (no container restart needed).
+1. **Fork** el repositorio
+2. **Crea** una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. **Commit** tus cambios (`git commit -am 'Añadir nueva funcionalidad'`)
+4. **Push** a la rama (`git push origin feature/nueva-funcionalidad`)
+5. **Crea** un Pull Request
 
 ---
 
+## 📄 Licencia
 
-## ⚙️ Environment Knobs
-
-**Django/OpenMoxie**
-- `LLM_PROVIDER=ollama|openai|xai`
-- `OLLAMA_HOST=http://127.0.0.1:11434`
-- `OLLAMA_MODEL=llama3.2:3b`
-- `STT_BACKEND=local|openai`
-- `STT_URL=http://127.0.0.1:8001/stt`
-- `STT_LANG=en`
-
-**Local STT service (Docker or venv)**
-- `STT_MODEL=/models/faster-whisper-small.en` *(Docker path; venv can use `site/services/stt/models/...`)*
-- `STT_DEVICE=auto|cpu|cuda`
-- `STT_COMPUTE=int8|int8_float16|float16|float32`
-- `STT_VAD=1|0` (silence filtering)
+Este proyecto está basado en [openmoxie-ollama](https://github.com/moxie-robot/openmoxie-ollama) y mantiene la misma licencia.
 
 ---
 
-## ✅ Health & Debug
+## 🙏 Agradecimientos
 
-- STT service: `curl -s localhost:8001/health`
-- List available models: `curl -s localhost:8001/control/models | jq .`
-- Switch model/device/compute on the fly:
-  ```bash
-  curl -s -X POST -H "Content-Type: application/json"     --data '{"model":"/models/faster-whisper-base.en","device":"auto","compute":"int8"}'     http://127.0.0.1:8001/control/reload | jq .
-  ```
-- Django probe (shell):
-```python
-from hive.stt import transcribe_wav_bytes
-wav = open("/path/to.wav","rb").read()
-print(transcribe_wav_bytes(wav,"en")[0])
-```
+- **Moxie Robot Team** por el proyecto original
+- **Rhasspy Team** por Piper TTS
+- **Systran Team** por Faster-Whisper
+- **Ollama Team** por el servidor LLM local
 
 ---
 
-## 🧰 Troubleshooting
+## 📞 Soporte
 
-- “address already in use” → another STT instance is on that port. Kill it or use a new port.
-- “python-multipart required” (venv) → `pip install python-multipart`.
-- Empty transcripts → try `STT_VAD=0` to test very quiet audio.
-- GPU not used in Docker → set `gpus: all` and `STT_DEVICE=cuda`; verify with `/health` shows `"device":"cuda"`.
+- **Issues**: [GitHub Issues](https://github.com/tu-usuario/openmoxie-espanol/issues)
+- **Documentación**: [Wiki del proyecto](https://github.com/tu-usuario/openmoxie-espanol/wiki)
+- **Discusiones**: [GitHub Discussions](https://github.com/tu-usuario/openmoxie-espanol/discussions)
 
 ---
+
+**¡Disfruta de Moxie hablando en español! 🤖🇪🇸**

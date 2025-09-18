@@ -1,0 +1,12 @@
+# OpenMoxie TTS Subscriber - Dependencias Python
+# Servicio local para reproducir audio desde mensajes MQTT
+
+# MQTT Client
+paho-mqtt>=2.0.0
+
+# Web Framework para monitor
+flask>=2.3.0
+waitress>=2.1.0
+
+# Utilidades
+requests>=2.31.0

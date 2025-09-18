@@ -18,6 +18,8 @@ from .protos.embodied.logging.Cloud2_pb2 import ServiceConfiguration2
 from .protos.embodied.wifiapp.QRCommands_pb2 import StartPairingQR
 from .zmq_stt_handler import STTHandler
 from ..models import HiveConfiguration
+from .mqtt_tts_mirror import TTSMirrorPublisher
+from django.conf import settings
 
 _BASIC_FORMAT = '{1}'
 _MOXIE_SERVICE_INSTANCE = None
@@ -80,6 +82,11 @@ class MoxieServer:
         self._connect_pattern = r"connected from (.*) as (d_[a-f0-9-]+)"
         self._disconnect_pattern = r"Client (d_[a-f0-9-]+) (closed its connection|disconnected)"
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        # Inicializar el publicador de espejo TTS con configuración de Docker
+        mqtt_host = getattr(settings, 'MQTT_HOST', 'localhost')
+        # Para TTS Mirror usamos puerto 1883 (sin SSL) en lugar del puerto principal
+        mqtt_port = 1883
+        self._tts_mirror = TTSMirrorPublisher(host=mqtt_host, port=mqtt_port)
         self.update_from_database()
 
     # Connect to the broker - the jwt stuff left in place, but isn't required
@@ -315,6 +322,9 @@ class MoxieServer:
 
     # Send Telehealth - PLAY message to Moxie
     def send_telehealth_speech(self, device_id, speech:str, mood:str, intensity:float):
+        # Publicar texto en MQTT antes de enviarlo al robot
+        self._tts_mirror.publish_text(speech)
+
         markup = self._remote_chat.make_markup(speech, (mood, intensity))
         tmsg = { "action": "PLAY_OUTPUT", "output": { "text": speech, "markup": markup } }
         self.send_telehealth(device_id, tmsg)

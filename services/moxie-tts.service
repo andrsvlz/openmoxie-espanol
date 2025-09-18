@@ -1,0 +1,35 @@
+[Unit]
+Description=Moxie TTS Subscriber Service
+Documentation=https://github.com/vapors/openmoxie-ollama
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=steve
+Group=steve
+WorkingDirectory=/home/steve/moxie-tts-subscriber
+ExecStart=/home/steve/moxie-tts-subscriber/venv/bin/python /home/steve/moxie-tts-subscriber/app.py
+Restart=always
+RestartSec=10
+
+# Variables de entorno
+Environment=MQTT_HOST=localhost
+Environment=MQTT_PORT=1883
+Environment=MQTT_TOPIC=moxie/tts/text
+Environment=PIPER_BIN=/home/steve/piper/piper
+Environment=PIPER_MODEL=/home/steve/piper/es_ES-davefx-medium.onnx
+Environment=PIPER_CONF=/home/steve/piper/es_ES-davefx-medium.onnx.json
+Environment=HTTP_PORT=8787
+Environment=PULSE_RUNTIME_PATH=/run/user/1000/pulse
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=moxie-tts
+
+# Acceso a audio del usuario
+SupplementaryGroups=audio pulse-access
+
+[Install]
+WantedBy=multi-user.target

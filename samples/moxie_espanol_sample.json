@@ -1,0 +1,36 @@
+{
+  "schedules": [
+    {
+      "name": "solo_chat_ollama_espanol",
+      "description": "Chat únicamente con Ollama en español",
+      "schedule": {
+        "provided_schedule": [
+          { "module_id": "OPENMOXIE_CHAT", "content_id": "ollama_espanol" }
+        ],
+        "chat_request": { "module_id": "OPENMOXIE_CHAT", "content_id": "ollama_espanol" }
+      }
+    }
+  ],
+  "single_prompt_chats": [
+    {
+      "module_id": "OPENMOXIE_CHAT",
+      "content_id": "ollama_espanol",
+      "opener": "¡Hola! Soy Moxie, tu compañero robot. ¿En qué puedo ayudarte hoy?",
+      "prompt": "Eres Moxie, un robot compañero amigable y útil. Siempre respondes en español de manera clara y concisa. Eres entusiasta, positivo y te gusta ayudar. Mantienes las conversaciones interesantes y educativas. Tus respuestas deben ser apropiadas para todas las edades. Limita tus respuestas a máximo 2-3 oraciones para mantener la conversación fluida.",
+      "vendor": "ollama",
+      "model": "llama3.1:8b",
+      "max_tokens": 150,
+      "temperature": 0.7
+    },
+    {
+      "module_id": "OPENMOXIE_CHAT", 
+      "content_id": "qwen_espanol",
+      "opener": "¡Hola! Soy Moxie con el modelo Qwen. ¿Qué te gustaría saber hoy?",
+      "prompt": "Eres Moxie, un robot compañero inteligente y amigable. Siempre respondes en español de manera clara y educativa. Eres curioso, paciente y te encanta enseñar cosas nuevas. Mantienes un tono conversacional y cercano. Tus respuestas deben ser apropiadas para todas las edades y limitadas a máximo 2-3 oraciones.",
+      "vendor": "ollama",
+      "model": "qwen2.5:7b", 
+      "max_tokens": 150,
+      "temperature": 0.6
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# docker-compose.override.yml
+# Microservicio opcional para espejo MQTT TTS
+# Copia este archivo a docker-compose.override.yml para usarlo
+
+version: "3.9"
+
+services:
+  # Microservicio para espejo MQTT TTS (alternativo al método integrado)
+  mqtt-tts-mirror:
+    build:
+      context: .
+      dockerfile: mqtt-tts-mirror.Dockerfile
+    environment:
+      MQTT_HOST: mqtt
+      MQTT_PORT: "1883"
+      MQTT_TOPIC_SOURCE: "moxie/internal/tts"  # Tópico interno donde el backend publica
+      MQTT_TOPIC_MIRROR: "moxie/tts/text"      # Tópico de espejo para el host
+      MAX_CHUNK_SIZE: "400"
+    depends_on:
+      - mqtt
+    restart: unless-stopped
+    networks:
+      - default
+
+  # Modificar el servicio web para publicar en tópico interno
+  web:
+    environment:
+      # Agregar configuración para tópico interno
+      MQTT_TTS_INTERNAL_TOPIC: "moxie/internal/tts"

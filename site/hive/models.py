@@ -97,20 +97,20 @@ class HiveConfiguration(models.Model):
     common_config = models.JSONField(null=True, blank=True)
     common_settings = models.JSONField(null=True, blank=True)
 
-    # sst config
+    # sst config - Configurado por defecto para español
     stt_backend = models.CharField(
         max_length=16,
         choices=[("local", "Local (faster-whisper)"), ("openai", "OpenAI Whisper")],
-        default="openai"
+        default="local"  # Cambiado a local para español
     )
-    stt_url = models.CharField(max_length=255, blank=True, null=True, help_text="Local STT endpoint, e.g. http://127.0.0.1:8001/stt")
-    stt_lang = models.CharField(max_length=16, default="en")
+    stt_url = models.CharField(max_length=255, blank=True, null=True, help_text="Local STT endpoint, e.g. http://stt:8001/stt", default="http://stt:8001/stt")
+    stt_lang = models.CharField(max_length=16, default="es")  # Cambiado a español
     stt_device = models.CharField(
         max_length=8,
         choices=[("auto", "Auto"), ("cpu", "CPU"), ("cuda", "CUDA (GPU)")],
         default="auto",
     )
-    stt_model = models.CharField(max_length=255, blank=True, null=True, help_text="Selected local STT model path (inside container)")
+    stt_model = models.CharField(max_length=255, blank=True, null=True, help_text="Selected local STT model path (inside container)", default="/models/faster-whisper-base")
     stt_compute = models.CharField(
         max_length=16,
         choices=[
@@ -119,7 +119,7 @@ class HiveConfiguration(models.Model):
             ("float16", "float16 (GPU best)"),
             ("float32", "float32"),
         ],
-        default="int8",
+        default="float16",  # Cambiado para mejor rendimiento GPU
     )
 
     def __str__(self):

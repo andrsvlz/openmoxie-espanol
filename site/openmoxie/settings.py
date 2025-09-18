@@ -41,11 +41,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_STORE_DIR = BASE_DIR / 'work'
 
 # ---- STT config (Django-side defaults; UI/DB can override) ----
-STT_BACKEND = os.getenv("STT_BACKEND", "openai")   # "local" | "openai"
-STT_URL     = os.getenv("STT_URL", "http://127.0.0.1:8001/stt")
-STT_LANG    = os.getenv("STT_LANG", "en")
+STT_BACKEND = os.getenv("STT_BACKEND", "local")   # "local" | "openai" - Cambiado a local para español
+STT_URL     = os.getenv("STT_URL", "http://stt:8001/stt")  # Cambiado para Docker
+STT_LANG    = os.getenv("STT_LANG", "es")  # Cambiado a español
 STT_DEVICE  = os.getenv("STT_DEVICE", "auto")
-STT_COMPUTE = os.getenv("STT_COMPUTE", "int8")
+STT_COMPUTE = os.getenv("STT_COMPUTE", "float16")  # Cambiado para mejor rendimiento GPU
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -164,9 +164,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'  # Cambiado a español
 
-TIME_ZONE = 'America/Los_Angeles'
+TIME_ZONE = 'Europe/Madrid'  # Cambiado a zona horaria española
 
 USE_I18N = True
 

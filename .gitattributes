@@ -1,0 +1,86 @@
+# OpenMoxie Español - Git Attributes
+
+# ===== ARCHIVOS DE TEXTO =====
+# Normalizar finales de línea
+*.py text eol=lf
+*.js text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+*.sh text eol=lf
+*.conf text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+*.env text eol=lf
+
+# ===== ARCHIVOS DE CONFIGURACIÓN =====
+# Docker
+Dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+.dockerignore text eol=lf
+
+# Git
+.gitignore text eol=lf
+.gitattributes text eol=lf
+
+# ===== ARCHIVOS BINARIOS =====
+# Imágenes
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text eol=lf
+
+# Audio
+*.wav binary
+*.mp3 binary
+*.ogg binary
+*.flac binary
+
+# Modelos AI
+*.onnx binary
+*.bin binary
+*.safetensors binary
+
+# Archivos comprimidos
+*.zip binary
+*.tar.gz binary
+*.tgz binary
+*.tar binary
+*.gz binary
+
+# ===== ARCHIVOS ESPECÍFICOS DEL PROYECTO =====
+# Scripts de instalación
+*.sh text eol=lf
+install_*.sh text eol=lf
+test_*.sh text eol=lf
+
+# Servicios systemd
+*.service text eol=lf
+
+# Configuraciones MQTT
+*.conf text eol=lf
+
+# ===== LINGUIST OVERRIDES =====
+# Marcar archivos como documentación
+README*.md linguist-documentation
+docs/* linguist-documentation
+*.md linguist-documentation
+
+# Marcar archivos como vendored (no contar en estadísticas)
+site/services/stt/models/* linguist-vendored
+*.onnx linguist-vendored
+*.bin linguist-vendored
+
+# Detectar lenguajes correctamente
+*.py linguist-language=Python
+*.js linguist-language=JavaScript
+*.html linguist-language=HTML
+*.css linguist-language=CSS
+*.yml linguist-language=YAML
+*.yaml linguist-language=YAML
